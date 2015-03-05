@@ -40,17 +40,26 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows),
-            'New to-do item does not appear in table'
-        )
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
         # There is still a text inviting to add another item
         # Enter "Use peacock feathers to make fly"
-        self.fail('Finish the test!!')
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Use peacock feathers to make fly')
+
         # Page updates again and shows an updated TO-DO list
 
+        inputbox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        self.assertIn('2: Use peacock feathers to make fly', [row.text for row in rows])
+
         # Unique URL is generated for this user, with some explanation about it
+
+        self.fail('Finish the test!!')
 
         # When visiting the URL the list is still there.
 
