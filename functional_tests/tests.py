@@ -1,10 +1,11 @@
 __author__ = 'Peter'
 
+from django.test import LiveServerTestCase
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -17,10 +18,10 @@ class NewVisitorTest(unittest.TestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
 
-    def test_can_start_a_list_and_retrieve_it_as_it_was(self):
+    def test_can_start_a_list_and_retrieve_it_later(self):
         # Person opens the browseer
         # Visit the homepage
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # Title and header mention TO-DO lists
         self.assertIn('To-Do',self.browser.title)
@@ -65,6 +66,3 @@ class NewVisitorTest(unittest.TestCase):
         # When visiting the URL the list is still there.
 
         # Stop browsing
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
